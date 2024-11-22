@@ -40,7 +40,7 @@ jobs:
       # Step 4: Configure Docker to Use Artifact Registry
       - name: Configure Docker for Artifact Registry
         run: |
-          gcloud auth configure-docker ${env.ARTIFACT_REGION}-docker.pkg.dev
+          gcloud auth configure-docker ${ARTIFACT_REGION}-docker.pkg.dev
 
       # Step 5: Build Docker Image
       - name: Build Docker Image
