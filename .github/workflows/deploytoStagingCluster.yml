@@ -1,0 +1,80 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: settyl-gcp-infra
+  CLUSTER_NAME: supplychainvisibility-staging
+  REGION: us-east1
+  DEPLOYMENT_NAME: configmanagementapi
+  IMAGE_NAME: configmanagementapi
+  ARTIFACT_REPO: supplychainvisibilitygcr-staging
+  ARTIFACT_REGION: us-east1
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy to GKE
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Authenticate with Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      # Step 3: Set up gcloud CLI
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          project_id: ${{ env.PROJECT_ID }}
+
+      # Step 4: Configure Docker to Use Artifact Registry
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${env.ARTIFACT_REGION}-docker.pkg.dev
+
+      # Step 5: Build Docker Image
+      - name: Build Docker Image
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t ${env.ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG .
+
+      # Step 6: Push Docker Image to Artifact Registry
+      - name: Push Docker Image to Artifact Registry
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker push ${env.ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG
+
+      # Step 7: Set up GKE context
+      - name: Set up GKE context
+        run: |
+          gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }}
+
+      # Step 8: Deploy to GKE
+      - name: Deploy to GKE
+        run: |
+          kubectl apply -f manifests/staging/deployment.yml
+          kubectl apply -f manifests/staging/service.yml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+
+      # Step 9: Verify Deployment
+      - name: Verify Deployment
+        run: |
+          kubectl get all -n default
+
+      # Optional: Notify on Deployment Success
+      - name: Notify Deployment Success
+        if: success()
+        run: |
+          echo "Deployment to GKE was successful!"
