@@ -1,8 +1,61 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "configmanagementapi"
-  namespace: "staging"
+  namespace: "gatekeeper-system"
+  annotations:
+    secrets.infisical.com/auto-reload: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "configmanagementapi"
+  template:
+    metadata:
+      labels:
+        app: "configmanagementapi"
+    spec:
+      containers:
+        - name: "configmanagementapi"
+          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi"
+          envFrom:
+            - secretRef:
+                name: microservice-api-secret
+          ports:
+            - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "configmanagementapi"
+  namespace: "supplychainvisibility"
+  annotations:
+    secrets.infisical.com/auto-reload: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "configmanagementapi"
+  template:
+    metadata:
+      labels:
+        app: "configmanagementapi"
+    spec:
+      containers:
+        - name: "configmanagementapi"
+          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi"
+          envFrom:
+            - secretRef:
+                name: microservice-api-secret
+          ports:
+            - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "configmanagementapi"
+  namespace: "kube-system"
   annotations:
     secrets.infisical.com/auto-reload: "true"
 spec:
