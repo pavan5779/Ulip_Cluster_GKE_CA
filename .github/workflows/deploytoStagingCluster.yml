@@ -46,13 +46,13 @@ jobs:
       - name: Build Docker Image
         run: |
           IMAGE_TAG=${{ github.sha }}
-          docker build -t ${env.ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG .
+          docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG .
 
       # Step 6: Push Docker Image to Artifact Registry
       - name: Push Docker Image to Artifact Registry
         run: |
           IMAGE_TAG=${{ github.sha }}
-          docker push ${env.ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG
+          docker push ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG
 
       # Step 7: Set up GKE context
       - name: Set up GKE context
