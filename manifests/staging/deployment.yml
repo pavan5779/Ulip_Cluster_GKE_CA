@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: "configmanagementapi"
-          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi"
+          image: "supplychainvisibilitygcrstaging/configmanagementapi"
           envFrom:
             - secretRef:
                 name: microservice-api-secret
