@@ -37,38 +37,43 @@ jobs:
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
           project_id: ${{ env.PROJECT_ID }}
 
-      # Step 4: Configure Docker to Use Artifact Registry
+      # Step 4: Install gke-gcloud-auth-plugin
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin
+
+      # Step 5: Configure Docker to Use Artifact Registry
       - name: Configure Docker for Artifact Registry
         run: |
           gcloud auth configure-docker ${ARTIFACT_REGION}-docker.pkg.dev
 
-      # Step 5: Build Docker Image
+      # Step 6: Build Docker Image
       - name: Build Docker Image
         run: |
           IMAGE_TAG=${{ github.sha }}
           docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG .
 
-      # Step 6: Push Docker Image to Artifact Registry
+      # Step 7: Push Docker Image to Artifact Registry
       - name: Push Docker Image to Artifact Registry
         run: |
           IMAGE_TAG=${{ github.sha }}
           docker push ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG
 
-      # Step 7: Set up GKE context
+      # Step 8: Set up GKE context
       - name: Set up GKE context
         run: |
           gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }}
 
-      # Step 8: Deploy to GKE
+      # Step 9: Deploy to GKE
       - name: Deploy to GKE
         run: |
           kubectl apply -f manifests/staging/deployment.yml
           kubectl apply -f manifests/staging/service.yml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
 
-      # Step 9: Verify Deployment
+      # Step 10: Verify Deployment
       - name: Verify Deployment
         run: |
           kubectl get all -n default
