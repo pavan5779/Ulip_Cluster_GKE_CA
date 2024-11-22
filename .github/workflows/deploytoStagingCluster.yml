@@ -11,7 +11,7 @@ env:
   REGION: us-east1
   DEPLOYMENT_NAME: configmanagementapi
   IMAGE_NAME: configmanagementapi
-  ARTIFACT_REPO: supplychainvisibilitygcr-staging
+  ARTIFACT_REPO: supplychainvisibilitygcrstaging
   ARTIFACT_REGION: us-east1
 
 jobs:
