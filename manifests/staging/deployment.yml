@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: "configmanagementapi"
-          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:4e7eedea2f443828a46ecdff7c2a9e72c4ccb025"
+          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
           ports:
             - containerPort: 8000
 ---
