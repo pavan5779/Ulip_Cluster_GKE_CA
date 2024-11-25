@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,8 +20,17 @@ spec:
           image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: "eu-gcr-io-registry"
+
+# Deployment in supplychainvisibility namespace
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,8 +54,17 @@ spec:
           image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: "eu-gcr-io-registry"
+
+# Deployment in kube-system namespace
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -71,5 +88,12 @@ spec:
           image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: "eu-gcr-io-registry"
