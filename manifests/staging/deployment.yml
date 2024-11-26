@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: "configmanagementapi"
   namespace: "gatekeeper-system"
-  annotations:
-    secrets.infisical.com/auto-reload: "true"
 spec:
   replicas: 1
   selector:
@@ -27,8 +25,6 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-      imagePullSecrets:
-        - name: "eu-gcr-io-registry"
 
 # Deployment in supplychainvisibility namespace
 ---
@@ -37,8 +33,6 @@ kind: Deployment
 metadata:
   name: "configmanagementapi"
   namespace: "supplychainvisibility"
-  annotations:
-    secrets.infisical.com/auto-reload: "true"
 spec:
   replicas: 1
   selector:
@@ -61,8 +55,6 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-      imagePullSecrets:
-        - name: "eu-gcr-io-registry"
 
 # Deployment in kube-system namespace
 ---
@@ -71,8 +63,6 @@ kind: Deployment
 metadata:
   name: "configmanagementapi"
   namespace: "kube-system"
-  annotations:
-    secrets.infisical.com/auto-reload: "true"
 spec:
   replicas: 1
   selector:
@@ -95,5 +85,3 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-      imagePullSecrets:
-        - name: "eu-gcr-io-registry"
