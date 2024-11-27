@@ -2,67 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "configmanagementapi"
-  namespace: "gatekeeper-system"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: "configmanagementapi"
-  template:
-    metadata:
-      labels:
-        app: "configmanagementapi"
-    spec:
-      containers:
-        - name: "configmanagementapi"
-          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
-          ports:
-            - containerPort: 8000
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-
-# Deployment in supplychainvisibility namespace
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: "configmanagementapi"
   namespace: "supplychainvisibility"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: "configmanagementapi"
-  template:
-    metadata:
-      labels:
-        app: "configmanagementapi"
-    spec:
-      containers:
-        - name: "configmanagementapi"
-          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
-          ports:
-            - containerPort: 8000
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "250m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
-
-# Deployment in kube-system namespace
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: "configmanagementapi"
-  namespace: "kube-system"
 spec:
   replicas: 1
   selector:
