@@ -16,6 +16,7 @@ spec:
       containers:
         - name: "configmanagementapi"
           image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           resources:
