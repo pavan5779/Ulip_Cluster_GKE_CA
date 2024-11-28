@@ -66,6 +66,7 @@ jobs:
         run: |
           kubectl apply -f manifests/staging/deployment.yml
           kubectl apply -f manifests/staging/service.yml
+          kubectl apply -f manifests/staging/ingress.yml
 
       # Step 9: Verify Deployment
       - name: Verify Deployment
