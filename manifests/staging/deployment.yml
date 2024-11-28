@@ -1,21 +1,108 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "configmanagementapi"
-  namespace: "supplychainvisibility"
+  name: ulipvahanapi
+  namespace: ulipsystem
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "configmanagementapi"
+      app: ulipvahanapi
   template:
     metadata:
       labels:
-        app: "configmanagementapi"
+        app: ulipvahanapi
     spec:
       containers:
-        - name: "configmanagementapi"
-          image: "us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcrstaging/configmanagementapi:latest"
+        - name: ulipvahanapi
+          image: us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcr/ulipvahanapi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: internalotrulipapi
+  namespace: ulipsystem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internalotrulipapi
+  template:
+    metadata:
+      labels:
+        app: internalotrulipapi
+    spec:
+      containers:
+        - name: internalotrulipapi
+          image: us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcr/internalotrulipapi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ulipfastagapi
+  namespace: ulipsystem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ulipfastagapi
+  template:
+    metadata:
+      labels:
+        app: ulipfastagapi
+    spec:
+      containers:
+        - name: ulipfastagapi
+          image: us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcr/ulipfastagapi
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ulipintermodalapi
+  namespace: ulipsystem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ulipintermodalapi
+  template:
+    metadata:
+      labels:
+        app: ulipintermodalapi
+    spec:
+      containers:
+        - name: ulipintermodalapi
+          image: us-east1-docker.pkg.dev/settyl-gcp-infra/supplychainvisibilitygcr/ulipintermodalapi
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
