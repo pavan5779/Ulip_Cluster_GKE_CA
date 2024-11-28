@@ -4,7 +4,7 @@ metadata:
   name: ulipvahanapi
   namespace: ulipsystem
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ulipvahanapi
@@ -33,7 +33,7 @@ metadata:
   name: internalotrulipapi
   namespace: ulipsystem
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: internalotrulipapi
@@ -62,7 +62,7 @@ metadata:
   name: ulipfastagapi
   namespace: ulipsystem
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ulipfastagapi
@@ -91,7 +91,7 @@ metadata:
   name: ulipintermodalapi
   namespace: ulipsystem
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ulipintermodalapi
