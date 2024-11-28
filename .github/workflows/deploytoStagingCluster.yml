@@ -10,7 +10,7 @@ env:
   CLUSTER_NAME: ulipsystem
   REGION: asia-south1
   ARTIFACT_REPO: supplychainvisibilitygcr
-  ARTIFACT_REGION: asia-south1
+  ARTIFACT_REGION: us-east1
 
 jobs:
   build-and-deploy:
