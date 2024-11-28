@@ -1,0 +1,116 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ulipsystem-ingress
+  namespace: ulipsystem
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 128k
+    nginx.ingress.kubernetes.io/load-balance: round_robin
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+    nginx.ingress.kubernetes.io/proxy-buffers-number: '4'
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '600'
+    nginx.ingress.kubernetes.io/proxy-next-upstream: error timeout http_502
+    nginx.ingress.kubernetes.io/proxy-next-upstream-tries: '3'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '600'
+    nginx.ingress.kubernetes.io/upstream-keepalive-connections: '32'
+    nginx.ingress.kubernetes.io/upstream-keepalive-requests: '100'
+    nginx.ingress.kubernetes.io/upstream-keepalive-timeout: '60'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - ulip.settyl.com
+        - connect.settyl.com
+      secretName: tls-secret
+  rules:
+    - host: connect.settyl.com
+      http:
+        paths:
+          - path: /api/fastag/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipfastagapi
+                port:
+                  number: 8000
+    - host: ulip.settyl.com
+      http:
+        paths:
+          - path: /api/icegate/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipicegateapi
+                port:
+                  number: 8000
+          - path: /api/fastag/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipfastagapi
+                port:
+                  number: 8000
+          - path: /api/vahan/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipvahanapi
+                port:
+                  number: 8000
+          - path: /api/sarathi/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipsarathiapi
+                port:
+                  number: 8000
+          - path: /api/airrail/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipairrailapi
+                port:
+                  number: 8000
+          - path: /api/subscription/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipsubscriptionapi
+                port:
+                  number: 8000
+          - path: /api/intermodal/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipintermodalapi
+                port:
+                  number: 8000
+          - path: /api/multimodal/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ulipmultimodalapi
+                port:
+                  number: 8000
+          - path: /api/ewaybill/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ewaybillinvoiceapi
+                port:
+                  number: 8000
+          - path: /api/otrulip/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: internalotrulipapi
+                port:
+                  number: 8000
+status:
+  loadBalancer:
+    ingress:
+      - ip: 20.207.64.131
