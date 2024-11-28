@@ -50,7 +50,7 @@ jobs:
         run: |
           IMAGES=("ulipvahanapi" "internalotrulipapi" "ulipfastagapi" "ulipintermodalapi")
           for IMAGE in "${IMAGES[@]}"; do
-            docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${IMAGE}:latest -f Dockerfile.${IMAGE} .
+            docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${IMAGE}:latest .
             docker push ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${IMAGE}:latest
           done
 
