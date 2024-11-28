@@ -9,8 +9,6 @@ env:
   PROJECT_ID: settyl-gcp-infra
   CLUSTER_NAME: ulipsystem
   REGION: asia-south1
-  DEPLOYMENT_NAME: configmanagementapi
-  IMAGE_NAME: ulipvahanapi,internalotrulipapi,ulipfastagapi,ulipintermodalapi
   ARTIFACT_REPO: supplychainvisibilitygcr
   ARTIFACT_REGION: asia-south1
 
@@ -47,37 +45,34 @@ jobs:
         run: |
           gcloud auth configure-docker ${ARTIFACT_REGION}-docker.pkg.dev
 
-      # Step 6: Build Docker Image
-      - name: Build Docker Image
+      # Step 6: Build and Push Docker Images
+      - name: Build and Push Docker Images
         run: |
-          IMAGE_TAG=${{ github.sha }}
-          docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest .
+          IMAGES=("ulipvahanapi" "internalotrulipapi" "ulipfastagapi" "ulipintermodalapi")
+          for IMAGE in "${IMAGES[@]}"; do
+            docker build -t ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${IMAGE}:latest -f Dockerfile.${IMAGE} .
+            docker push ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${IMAGE}:latest
+          done
 
-      # Step 7: Push Docker Image to Artifact Registry
-      - name: Push Docker Image to Artifact Registry
-        run: |
-          IMAGE_TAG=${{ github.sha }}
-          docker push ${ARTIFACT_REGION}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest
-
-      # Step 8: Set up GKE context
+      # Step 7: Set up GKE context
       - name: Set up GKE context
         run: |
           gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }}
 
-      # Step 9: Deploy to GKE
+      # Step 8: Deploy to GKE
       - name: Deploy to GKE
         run: |
           kubectl apply -f manifests/staging/deployment.yml
           kubectl apply -f manifests/staging/service.yml
 
-      # Step 10: Verify Deployment
+      # Step 9: Verify Deployment
       - name: Verify Deployment
         run: |
-          kubectl get all --all-namespaces
+          kubectl get all --namespace=ulipsystem
 
-      # Optional: Notify on Deployment Success
+      # Step 10: Notify on Deployment Success
       - name: Notify Deployment Success
         if: success()
         run: |
