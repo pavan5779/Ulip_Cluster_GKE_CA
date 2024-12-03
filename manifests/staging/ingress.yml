@@ -21,13 +21,13 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - ulip.settyl.com
-        - connect.settyl.com
-      secretName: tls-secret
+  # tls:
+  #   - hosts:
+  #       - ulip.settyl.com
+  #       - connect.settyl.com
+  #     secretName: tls-secret
   rules:
-    - host: connect.settyl.com
+    - host: gke.ulip.settyl.com
       http:
         paths:
           - path: /api/fastag/?(.*)
@@ -37,8 +37,8 @@ spec:
                 name: ulipfastagapi
                 port:
                   number: 8000
-    - host: ulip.settyl.com
-      http:
+    # - host: ulip.settyl.com
+    - http:
         paths:
           - path: /api/icegate/?(.*)
             pathType: Prefix
